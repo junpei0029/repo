@@ -20,7 +20,7 @@ public class UserOperation {
 	/**
 	 * @return primary
 	 */
-	public PrimaryList getprimary() {
+	public PrimaryList getPrimary() {
 		return primary;
 	}
 
@@ -34,7 +34,7 @@ public class UserOperation {
 	/**
 	 * @param primary セットする primary
 	 */
-	public void setprimary(PrimaryList primary) {
+	public void setPrimary(PrimaryList primary) {
 		this.primary = primary;
 	}
 
