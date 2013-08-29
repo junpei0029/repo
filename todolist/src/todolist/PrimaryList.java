@@ -7,7 +7,7 @@ import javax.swing.ListModel;
 import javax.swing.border.TitledBorder;
 
 
-public interface StatePrimary {
+public interface PrimaryList {
 
 	JList getToDoList();
 
