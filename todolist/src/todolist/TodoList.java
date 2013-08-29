@@ -1119,7 +1119,7 @@ public class TodoList extends JFrame {
 	 * @param s
 	 */
 	private void addListTextForUndo(UserOperation lastOpe) {
-		TodoListModel listModel = (TodoListModel) lastOpe.getState().getToDoListModel();
+		TodoListModel listModel = (TodoListModel) lastOpe.getPrimary().getToDoListModel();
 		listModel.addElement(lastOpe.getSelectedIndex(), lastOpe.getTodo());
 	}
 
@@ -1130,7 +1130,7 @@ public class TodoList extends JFrame {
 	 * @param s
 	 */
 	private void editListTextForUndo(UserOperation lastOpe) {
-		lastOpe.getState().editListElement(lastOpe.getSelectedIndex(), lastOpe.getTodo());
+		lastOpe.getPrimary().editListElement(lastOpe.getSelectedIndex(), lastOpe.getTodo());
 	}
 
 	/**
@@ -1140,7 +1140,7 @@ public class TodoList extends JFrame {
 	 * @param s
 	 */
 	private void deleteListElementForUndo(UserOperation lastOpe) {
-		lastOpe.getState().deleteListElement(lastOpe.getSelectedIndex());
+		lastOpe.getPrimary().deleteListElement(lastOpe.getSelectedIndex());
 	}
 
 
