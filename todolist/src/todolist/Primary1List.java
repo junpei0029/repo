@@ -6,7 +6,7 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.border.TitledBorder;
 
-public class Primary1List implements StatePrimary {
+public class Primary1List implements PrimaryList {
 
 	private static final StatePrimary PRIMARY_LIST = new Primary1List();
 
