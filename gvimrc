@@ -119,10 +119,70 @@ amenu <silent> 10.402 &File.差分表示(&D)<Tab>:Diff  :browse vertical diffspl
 "----------------------------------------
 "個人設定
 "----------------------------------------
-"
-" Ctrl+Vの挙動を変更
-nmap <C-v> <C-v>
-cmap <C-v> <C-v>
+
+"デフォルト設定"{{{
+
+"検索関連
+set ignorecase          " 大文字小文字を区別しない
+set smartcase           " 検索文字に大文字がある場合は大文字小文字を区別
+set incsearch           " インクリメンタルサーチ
+set hlsearch            " 検索マッチテキストをハイライト
+
+"編集関連
+set showmatch           " 対応する括弧などをハイライト表示する
+set matchtime=3         " 対応括弧のハイライト表示を3秒にする
+" 対応括弧に'<'と'>'のペアを追加
+set matchpairs& matchpairs+=<:>
+
+" バックスペースでなんでも消せるようにする
+set backspace=indent,eol,start
+
+"カーソル行の協調表示
+set cursorline
+
+" 移動コマンドを使ったとき、行頭に移動しない
+"set startofline
+
+" カーソルを行頭、行末で止まらないようにする
+set whichwrap=b,s,h,l,<,>,[,]
+
+"10行目からスクロールする
+set scrolloff=10
+
+"タブのスペース数
+set tabstop=4
+
+"シフト幅の大きさ
+set shiftwidth=4
+
+"初期設定折り返し無
+set wrap!
+
+
+"swapファイルを作成しない
+set noswapfile
+
+"バックアップファイルを作成しない
+set nobackup
+set nowritebackup
+
+"他のアプリでコピーした文字をVimで貼付ける"
+set clipboard=unnamed,autoselect
+
+"fileencording 
+"set fenc=utf-8
+
+" デフォルトエンコーディング
+set encoding=utf-8
+
+" デフォルト改行コード(LF)
+"set fileformat=unix
+
+"透明化
+set transparency=230
+
+"折り畳み
+set foldmethod=marker
 
 "入力モード時、ステータスラインのカラーを変更
 augroup InsertHook
@@ -138,35 +198,6 @@ au BufNewFile,BufRead * match ZenkakuSpace /　/
 "ウィンドウを最大化して起動
 au GUIEnter * simalt ~x
 
-"検索関連
-set ignorecase          " 大文字小文字を区別しない
-set smartcase           " 検索文字に大文字がある場合は大文字小文字を区別
-set incsearch           " インクリメンタルサーチ
-set hlsearch            " 検索マッチテキストをハイライト
-
-" バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
-cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
-cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
-
-"編集関連
-set showmatch           " 対応する括弧などをハイライト表示する
-set matchtime=3         " 対応括弧のハイライト表示を3秒にする
-" 対応括弧に'<'と'>'のペアを追加
-set matchpairs& matchpairs+=<:>
-
-" バックスペースでなんでも消せるようにする
-set backspace=indent,eol,start
-
-
-
-
-"カーソル行の協調表示
-set cursorline
-
-"ノーマルモード中のエンター改行
-noremap <CR> O<ESC>
-noremap <S-CR> o<ESC>
-
 " カレントディレクトリを自動的に移動
 augroup BufferAu
     autocmd!
@@ -177,6 +208,39 @@ augroup END
 "ビジュアルモード時vで行末まで選択
 vnoremap v $
 
+
+"ダウンコピー
+"function! s:downCopy() range
+"    echo a:firstline
+"    echo virtcol('.')
+"	echo a:lastline
+"endfun
+"vnoremap <C-m>  :call <SID>downCopy()<CR>
+
+"数値の連番挿入
+"nnoremap <C-n> yyp<C-a>
+
+"nnoremap gc `[v`]
+"vnoremap gc :<C-u>normal gc<Enter>
+"onoremap gc :<C-u>normal gc<Enter>
+
+
+"}}}
+
+"キーバインド設定"{{{
+
+" Ctrl+Vの挙動を変更
+nmap <C-v> <C-v>
+cmap <C-v> <C-v>
+
+" バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+
+"ノーマルモード中のエンター改行
+noremap <CR> O<ESC>
+noremap <S-CR> o<ESC>
+
 "行の折り返しキーマップ
 nnoremap <Leader>w  :set wrap!<CR>
 
@@ -185,26 +249,12 @@ nnoremap <Space>.  :<C-u>edit $MYGVIMRC<CR>
 " source ~/.vimrc を実行する。
 nnoremap <Space>,  :<C-u>source $MYGVIMRC<CR>
 
-" 移動コマンドを使ったとき、行頭に移動しない
-"set startofline
-
-" カーソルを行頭、行末で止まらないようにする
-set whichwrap=b,s,h,l,<,>,[,]
-
 
 "カーソル位置の単語とヤンクした文字列を置換する
 nnoremap <silent> ciy ciw<C-r>0<ESC>:let@/=@1<CR>:noh<CR>
 nnoremap <silent> cy   ce<C-r>0<ESC>:let@/=@1<CR>:noh<CR>
 vnoremap <silent> cy   c<C-r>0<ESC>:let@/=@1<CR>:noh<CR>
 
-"タブのスペース数
-set tabstop=4
-
-"シフト幅の大きさ
-set shiftwidth=4
-
-"初期設定折り返し無
-set wrap!
 
 "全選択
 nnoremap <C-a> ggVG
@@ -224,7 +274,7 @@ nnoremap - <C-x>
 inoremap <C-t>  <C-r>=strftime('%Y/%m/%d/%H:%M')<Return>
 
 "置換補助コマンド
-nnoremap <C-h> :%s///g
+nnoremap <C-y> :%s///g
 
 "ヴィジュアルモードで選択した文字列を検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
@@ -253,14 +303,6 @@ vnoremap ,t :s/,/\r/g<CR>
 "空行削除
 nnoremap <C-n> :g/^$/d<CR>
 
-"ダウンコピー
-"function! s:downCopy() range
-"    echo a:firstline
-"    echo virtcol('.')
-"	echo a:lastline
-"endfun
-"vnoremap <C-m>  :call <SID>downCopy()<CR>
-
 "括弧補助コマンド
 inoremap { {}<LEFT>
 inoremap [ []<LEFT>
@@ -286,6 +328,15 @@ inoremap <C-f> <ESC>^i
 inoremap <C-d> <ESC>ddi
 
 inoremap <C-b> ⇒
+"
+"<PageDown>と<PageUp>もスムーズスクロール(smooth_scroll.vim)
+" http://blog.blueblack.net/item_219
+nnoremap <PageDown> <C-F>
+nnoremap <PageUp> <C-B>
+ 
+" スムーズスクロールの実現
+map <C-U> <C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P>
+map <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
 
 " 検索後にジャンプした際に検索単語を画面中央に持ってくる
 nnoremap n nzz
@@ -299,16 +350,6 @@ nnoremap g# g#zz
 nnoremap j gj
 nnoremap k gk
 
-"vnoremap <Up>	 l
-"vnoremap <Down>  k	
-"vnoremap <Left>	 ;
-"vnoremap <Right> j	
-"
-"inoremap <C-l> <UP>
-"inoremap <C-k> <DOWN>
-"inoremap <C-;> <LEFT>
-"inoremap <C-j> <RIGHT>
-"
 " Ctrl + hjkl でウィンドウ間を移動
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -354,31 +395,17 @@ nnoremap <silent> ; :call <SID>JumpAtoMiddle()<CR>
 "ファイラーの起動"
 nnoremap <silent><Space>f    :Explore<CR>
 
-"swapファイルを作成しない
-set noswapfile
-
-"バックアップファイルを作成しない
-set nobackup
-set nowritebackup
-
-"他のアプリでコピーした文字をVimで貼付ける"
-set clipboard=unnamed,autoselect
 
 "ESCコマンド"
 inoremap <C-c> <Esc>
 inoremap jj <Esc>
 
 "コピーした文字で繰り返し上書きペースト可能にする"
-vnoremap <silent> <C-p> "0p<CR>
+"vnoremap <silent> <C-p> "0p<CR>
 
-"fileencording 
-"set fenc=utf-8
-
-" デフォルトエンコーディング
-set encoding=utf-8
-
-"" デフォルト改行コード(LF)
-"set fileformat=unix
+"コピーした文字を矩形選択でペースト可能にする
+vnoremap <S-p> I<C-r>"<ESC><ESC>
+vnoremap <C-p> A<C-r>"<ESC><ESC>
 
 " Indent
 nnoremap > >>
@@ -389,26 +416,19 @@ xnoremap <TAB>  >
 " <S-TAB>: unindent.
 xnoremap <S-TAB>  <
 
-"数値の連番挿入
-"nnoremap <C-n> yyp<C-a>
-
-"nnoremap gc `[v`]
-"vnoremap gc :<C-u>normal gc<Enter>
-"onoremap gc :<C-u>normal gc<Enter>
-
-"透明化
-set transparency=230
-"
-" Folding {{{
-
-set foldmethod=marker
-
 " Toggle folding
-
 nnoremap \ za
 vnoremap \ za
 
-" }}}
+
+
+
+"}}}
+
+
+
+
+
 
 
 "********************************************************************************
