@@ -158,7 +158,6 @@ set shiftwidth=4
 "初期設定折り返し無
 set wrap!
 
-
 "swapファイルを作成しない
 set noswapfile
 
@@ -271,7 +270,8 @@ nnoremap + <C-a>
 nnoremap - <C-x>
 
 "現在日時挿入
-inoremap <C-t>  <C-r>=strftime('%Y/%m/%d/%H:%M')<Return>
+"inoremap <C-t>  <C-r>=strftime('%Y/%m/%d/%H:%M')<Return>
+inoremap <C-t>  <C-r>=strftime('%Y/%m/%d')<Return>
 
 "置換補助コマンド
 nnoremap <C-y> :%s///g
@@ -283,7 +283,8 @@ vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><C
 vnoremap <C-e> "wy :%s/\V<C-r>=substitute(escape(@w,'/'),"\n",'\\n','g')<CR>//g
 
 "ダブルクリックで単語検索
-nnoremap <2-LeftMouse> g*
+"nnoremap <2-LeftMouse> g*
+nnoremap <2-LeftMouse> bve
 
 "挿入文字を含まない行を削除（gは含む）
 nnoremap <C-g> :v//d
@@ -301,7 +302,13 @@ vnoremap ,J J:s/ /,/g<CR>
 vnoremap ,t :s/,/\r/g<CR>
 
 "空行削除
-nnoremap <C-n> :g/^$/d<CR>
+"nnoremap <C-n> :g/^$/d<CR>
+nnoremap <Space>n  :g/^$/d<CR>
+"
+"行末の空白削除
+"nmap <C-m> :%s/ *$//g<CR>
+nnoremap <Space>m  :%s/ *$//g<CR>
+
 
 "括弧補助コマンド
 inoremap { {}<LEFT>
@@ -335,8 +342,8 @@ nnoremap <PageDown> <C-F>
 nnoremap <PageUp> <C-B>
  
 " スムーズスクロールの実現
-map <C-U> <C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P>
-map <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
+nnoremap <C-U> <C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P><C-P>
+nnoremap <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
 
 " 検索後にジャンプした際に検索単語を画面中央に持ってくる
 nnoremap n nzz
@@ -350,11 +357,21 @@ nnoremap g# g#zz
 nnoremap j gj
 nnoremap k gk
 
+"画面分割＆タブ
+nnoremap ss :split<CR>
+nnoremap sv :vsplit<CR>
+
 " Ctrl + hjkl でウィンドウ間を移動
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+nnoremap sh <C-w>h
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+nnoremap sl <C-w>l
+
+" Ctrl + HJKL でウィンドウ間を移動
+nnoremap sH <C-w>H
+nnoremap sJ <C-w>J
+nnoremap sK <C-w>K
+nnoremap sL <C-w>L
 
 " Shift + 矢印でウィンドウサイズを変更
 nnoremap <S-Left>  <C-w><<CR>
@@ -362,33 +379,37 @@ nnoremap <S-Right> <C-w>><CR>
 nnoremap <S-Up>    <C-w>-<CR>
 nnoremap <S-Down>  <C-w>+<CR>
 
+" TABにて対応ペアにジャンプ
+nnoremap <Tab> %
+vnoremap <Tab> %
+
 "行の中央にジャンプ"
 function! s:JumpMiddle()
-let end = col('$')-1
-let middle = float2nr(ceil(end/2))
-let save_cursor = getpos(".")
-let save_cursor[2] = middle
-call setpos('.', save_cursor)
+	let end = col('$')-1
+	let middle = float2nr(ceil(end/2))
+	let save_cursor = getpos(".")
+	let save_cursor[2] = middle
+	call setpos('.', save_cursor)
 endfun
 nnoremap <silent> M :call <SID>JumpMiddle()<CR>
 
 "現在のカーソルと行末の中央にジャンプ"
 function! s:JumpMaeMiddle()
-let now_cursor = getpos(".")
-let dist = float2nr(ceil(now_cursor[2]/2)) 
-let now_cursor[2] = dist
-call setpos('.', now_cursor)
+	let now_cursor = getpos(".")
+	let dist = float2nr(ceil(now_cursor[2]/2)) 
+	let now_cursor[2] = dist
+	call setpos('.', now_cursor)
 endfun
 nnoremap <silent> m :call <SID>JumpMaeMiddle()<CR>
 
 "現在のカーソルと行末の中央にジャンプ"
 function! s:JumpAtoMiddle()
-let end = col('$')-1
-let now_cursor = getpos(".")
-let middle = (end - now_cursor[2])
-let dist = float2nr(ceil(middle/2)) 
-let now_cursor[2] = dist + now_cursor[2]
-call setpos('.', now_cursor)
+	let end = col('$')-1
+	let now_cursor = getpos(".")
+	let middle = (end - now_cursor[2])
+	let dist = float2nr(ceil(middle/2)) 
+	let now_cursor[2] = dist + now_cursor[2]
+	call setpos('.', now_cursor)
 endfun
 nnoremap <silent> ; :call <SID>JumpAtoMiddle()<CR>
 
@@ -420,14 +441,33 @@ xnoremap <S-TAB>  <
 nnoremap \ za
 vnoremap \ za
 
+"DownCopy
+"function! s:DownCopy() range
+"	let now_cursor = getpos(".")
+"	let end = col('$')-1
+"	echo now_cursor[2]
+"	echo getline(a:firstline,a:lastline)
+"	echo getline(a:firstline - 1,a:lastline -1)
+"	echo end
+"
+"endfun
+"vnoremap <silent> ay :call <SID>DownCopy()<CR>
 
 
+"DownCopy
+nnoremap yd kyyp
 
 "}}}
 
 
 
 
+"pythonファイルの実行
+function! s:Exec()
+    exe "!" . &ft . " %"        
+:endfunction         
+command! Exec call <SID>Exec() 
+map <silent> <C-P> :call <SID>Exec()<CR>
 
 
 
@@ -440,39 +480,39 @@ vnoremap \ za
 " unite.vim
 "------------------------------------
 " 入力モードで開始する
-"let g:unite_enable_start_insert=1
+let g:unite_enable_start_insert=1
 "" バッファ一覧
 "noremap <C-U><C-B> :Unite buffer<CR>
 "
 "" ファイル一覧
-""noremap <C-U><C-F> :UniteWithBufferDir -buffer-name=files file<CR>
+"noremap <C-U><C-F> :UniteWithBufferDir -buffer-name=files file<CR>
 ""vimfilerを開くIDE風
-"nnoremap <C-U><C-F> :VimFilerBufferDir -split -simple -winwidth=35 -no-quit<CR>
+nnoremap <C-U><C-F> :VimFilerBufferDir -split -simple -winwidth=35 -no-quit<CR>
 "
 "" 最近使ったファイルの一覧
-"noremap <C-U><C-R> :Unite file_mru<CR>
+noremap <C-U><C-R> :Unite file_mru<CR>
 ""最近開いたファイル履歴の保存数
-"let g:unite_source_file_mru_limit = 100
+let g:unite_source_file_mru_limit = 50
 "
 ""vimfilerがspace+l,space+j,space+mに割り当てられる
 "let g:vimfiler_as_default_explorer = 1
 "let g:vimfiler_edit_action = 'tabopen'
 "
-""セーフモードを無効にした状態で起動する
-"let g:vimfiler_safe_mode_by_default = 0
-"
+"セーフモードを無効にした状態で起動する
+let g:vimfiler_safe_mode_by_default = 0
+
 ""レジスタ一覧
 "noremap <C-U><C-Y> :Unite -buffer-name=register register<CR>
 "" ファイルとバッファ
-"noremap <C-U><C-U> :Unite buffer file_mru<CR>
+noremap <C-U><C-U> :Unite buffer file_mru<CR>
 "" 全部
 "noremap <C-U><C-A> :Unite UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
-"" ESCキーを2回押すと終了する
-""au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-""au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+" ESCキーを2回押すと終了する
+au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
+au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
 "
 ""file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される
-"let g:unite_source_file_mru_filename_format = ''
+let g:unite_source_file_mru_filename_format = ''
 "
 ""uniteを開いている間のキーマッピング
 "autocmd FileType unite call s:unite_my_settings()
